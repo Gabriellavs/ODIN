@@ -1,0 +1,376 @@
+
+-- Criação do banco de dados
+create database DM2;
+
+--TABELA STGANOTACAO PARA ARMAZENAR OS DADOS ANOTADOS-----
+
+-- Table: public.stganotacao
+
+-- drop table stganotacao;
+
+CREATE TABLE public.stganotacao
+(
+    id_artigo varchar(90),
+    idclasse varchar(255),
+    termo varchar(255), 
+    ontologia varchar(255)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.stganotacao
+    OWNER to postgres;
+
+
+--TABELA STGDIMESTRUTURADA PARA ARMAZENAR DADOS ESTRUTURADOS-----
+
+-- Table: public.STGDimEstruturada
+
+-- DROP TABLE public.STGDimEstruturadas;
+
+CREATE TABLE public.STGDimEstruturadas
+(
+    PMID varchar(30),	
+    PMC varchar(30),
+    DOI  text, 
+    title text,
+    month varchar(20),
+    year varchar(20)	
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.STGDimEstruturadas
+    OWNER to postgres;
+
+
+--TABELA STGDIMORIGEM PARA TRANSFORMAR DADOS DA ORIGEM DOS ARTIGOS-----
+
+-- Table: public.STGDimOrigem
+
+-- DROP TABLE public.STGDimOrigem;
+
+CREATE TABLE public.STGDimOrigem
+(
+    PMID varchar(30),	
+    LastName varchar(90),
+    ForeName varchar(90), 
+    Affiliation text	
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.STGDimOrigem
+    OWNER to postgres;
+
+
+
+--TABELA DIMARTIGO PARA ARMAZENAR DADOS DOS ARTIGOS-----
+
+
+CREATE SEQUENCE dimartigo_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+
+-- DROP TABLE public.dimartigo;
+
+CREATE TABLE public.dimartigo
+(
+    id integer NOT NULL DEFAULT nextval('dimartigo_id_seq'::regclass),
+    PMID integer,
+    PMC varchar(30),
+    DOI varchar(90),
+    Title text,
+    Year integer,
+    Month integer,
+    CONSTRAINT dimartigo_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.dimartigo
+    OWNER to postgres;
+
+
+
+--TABELA DIMTEMPO PARA ARMAZENAR O PERIODO DOS ARTIGOS-----
+
+CREATE SEQUENCE dimtempo_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+-- Table: public.dimtempo
+
+-- DROP TABLE public.dimtempo;
+
+CREATE TABLE public.dimtempo
+(
+    id integer NOT NULL DEFAULT nextval('dimtempo_id_seq'::regclass),
+    Year integer NOT NULL,
+    Month integer NOT NULL,
+    Month_dsc  varchar(15),
+    CONSTRAINT dimtempo_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.dimtempo
+    OWNER to postgres;
+
+
+
+--TABELA DIMORIGEM PARA ARMAZENAR ORIGEM DOS ARTIGOS-----
+
+CREATE SEQUENCE dimorigem_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+-- Table: public.dimorigem
+
+-- DROP TABLE public.dimorigem;
+
+CREATE TABLE public.dimorigem
+(
+    id integer NOT NULL DEFAULT nextval('dimorigem_id_seq'::regclass),
+    Author_name varchar(255),
+    Affiliation text, 
+    CONSTRAINT dimorigem_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.dimorigem
+    OWNER to postgres;
+
+
+--TABELA STGCONCEITO PARA ARMAZENAR CONCEITOS JÁ EXTRAIDOS-----
+
+-- Table: public.stgconceito
+
+DROP TABLE public.stgconceito;
+
+CREATE TABLE public.stgconceito
+(
+    conceito varchar(90)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.stgconceito
+    OWNER to postgres;
+
+
+
+
+--TABELA STGONTOLOGIA PARA ARMAZENAR OS CONCEITOS DA ONTOLOGIA-----
+
+-- Table: public.stgontologia
+
+-- DROP TABLE public.stgontologia;
+
+CREATE TABLE public.stgontologia
+(
+    termo_id text,
+    termo_label text,
+    termo_link text,
+    superclass_id text,
+    superclass_link text,
+    nivel integer,
+    ontologia varchar(90),
+    categoria varchar(90)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.stgontologia
+    OWNER to postgres;
+
+
+
+--TABELA STGDIMONTOLOGIA PARA ARMAZENAR OS CONCEITOS ELEITOS PARA A DIMENSAO-----
+
+-- DROP SEQUENCE stgdimontologica_id_seq CASCADE;
+
+CREATE SEQUENCE stgdimontologica_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+-- DROP TABLE public.stgdimontologica;
+
+CREATE TABLE public.stgdimontologica
+(
+    id integer NOT NULL DEFAULT nextval('stgdimontologica_id_seq'::regclass),
+    ontologia varchar(45),    
+    categoria varchar(45), 
+    idconceito varchar(255) NOT NULL,
+    conceito varchar(255),
+    idconceitopai varchar(255) NOT NULL,
+    peso integer,
+    nivel integer,
+    CONSTRAINT stgdimontologica_pkey PRIMARY KEY (id)
+)
+WITH (
+
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.stgdimontologica
+    OWNER to postgres;
+
+
+
+
+--TABELA DIMONTOLOGIA PARA ARMAZENAR OS CONCEITOS DEFINIDOS COMO INSTÂNCIAS-----
+
+-- DROP SEQUENCE dimontologica_id_seq CASCADE;
+
+CREATE SEQUENCE dimontologica_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+-- Table: public.dimontologica
+
+-- DROP TABLE public.dimontologica;
+
+CREATE TABLE public.dimontologica
+(
+    id integer NOT NULL DEFAULT nextval('dimontologica_id_seq'::regclass),
+    ontologia varchar(45),    
+    categoria varchar(45), 
+    idconceito varchar(255) NOT NULL,
+    conceito varchar(255),
+    idconceitopai varchar(255) NOT NULL,
+    idpai integer,
+    peso integer,
+    CONSTRAINT dimontologica_pkey PRIMARY KEY (id)
+)
+WITH (
+
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.dimontologica
+    OWNER to postgres;
+
+
+
+
+--TABELA STGTFIDF PARA ARMAZENAR O CALCULO DE RELEVANCIA-----
+
+--CRIANDO SEQUENCIA PARA STGTFDIDF------------
+
+CREATE SEQUENCE stgtfidf_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+
+--DROP TABLE public.stgtfidf;
+
+CREATE TABLE public.stgtfidf
+(
+    ID integer NOT NULL DEFAULT nextval('stgtfidf_id_seq'::regclass),
+    artigo varchar(30),
+    conceito varchar(255),
+    tf float,
+    idf float,
+    tfidf float
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.stgtfidf
+    OWNER to postgres;
+
+
+
+--TABELA FTCOOCORRENCIA -----
+
+-- DROP SEQUENCE ftOcorr_id_seq CASCADE;
+
+CREATE SEQUENCE ftOcorr_id_seq 
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+-- Table: public.ftOcorrencia
+
+-- DROP TABLE public.ftOcorrencia;
+
+CREATE TABLE public.ftOcorrencia
+(
+    id integer NOT NULL DEFAULT nextval('ftOcorr_id_seq'::regclass),
+    dimonto_id integer,
+    dimartigo_id integer,
+    dimtempo_id integer,
+    dimorigem_id integer,
+    Ocorrencia integer,	
+    CONSTRAINT fato_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.ftOcorrencia
+    OWNER to postgres;
+
+
+-- Table: public.stgOcorrOrigem
+
+-- DROP TABLE public.FtOcorrTermo_has_DimOrigem;
+
+CREATE TABLE public.stgOcorrOrigem
+(
+    ftOcorr_id integer,
+    dimOrigem_id integer,
+    FOREIGN KEY (ftOcorr_id) REFERENCES ftcoocorrencia(ID),
+    FOREIGN KEY (dimOrigem_id) REFERENCES dimOrigem(ID)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.stgOcorrOrigem
+    OWNER to postgres;
