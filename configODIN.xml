@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odim>
+	<execucao>C</execucao>
+	<tfidf>0.50</tfidf>
+	<profundidade>5</profundidade>
+	<niveldimensao>1</niveldimensao>
+	<ontology>
+		<name>Human Disease Ontology</name>
+		<file>c:\\doid.owl</file>
+		<link>http://purl.obolibrary.org/obo/</link>
+		<prefix>PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt; 
+			PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; 						PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-s#&gt;</prefix>
+		<substr>'DOID_%'</substr>
+	</ontology>
+	<ontology>
+		<name>Protein Ontology</name>
+		<file>c:\\pro.owl</file>
+		<link>http://purl.obolibrary.org/obo/</link>
+		<prefix>PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt; 
+			PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; 						PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</prefix>
+		<substr>'GO_%' or idclasse like 'SO_%' or idclasse like 'PR_%' 
+			       or idclasse like 'BFO_%' or idclasse like 'NCBITaxon_%'</substr>
+	</ontology>
+	<ontology>
+		<name>Molecule Role</name>
+		<file>c:\\imr.owl</file>
+		<link>http://purl.obolibrary.org/obo/</link>
+		<prefix>PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt; 
+			PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; 
+			PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</prefix>
+		<substr>'IMR_%'</substr>
+	</ontology>
+</odim>
