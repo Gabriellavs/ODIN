@@ -25,8 +25,6 @@ Para iniciar as atividades de execução do método ODIN, siga as instruções a
 
 -- Adicione o ODIN.jar na pasta de preferência e direcione a transformação do ETL Ontológico para a pasta desejada.
 
--- Instale, configure e execute o Job ETL.
-
 -- Configure o Power Bi.
 
 
