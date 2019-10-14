@@ -169,7 +169,7 @@ ALTER TABLE public.dimorigem
 
 -- Table: public.stgconceito
 
-DROP TABLE public.stgconceito;
+-- DROP TABLE public.stgconceito;
 
 CREATE TABLE public.stgconceito
 (
@@ -364,7 +364,7 @@ CREATE TABLE public.stgOcorrOrigem
 (
     ftOcorr_id integer,
     dimOrigem_id integer,
-    FOREIGN KEY (ftOcorr_id) REFERENCES ftcoocorrencia(ID),
+    FOREIGN KEY (ftOcorr_id) REFERENCES ftocorrencia(ID),
     FOREIGN KEY (dimOrigem_id) REFERENCES dimOrigem(ID)
 )
 WITH (
